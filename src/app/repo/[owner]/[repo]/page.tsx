@@ -1,4 +1,3 @@
-// app/repo/[owner]/[repo]/page.tsx
 "use client";
 
 import { useEffect, useState } from "react";
@@ -63,37 +62,51 @@ export default function RepoPage() {
   };
 
   return (
-    <div style={{ padding: "2rem" }}>
-      <h1>
-        Repository: {owner}/{repo}
-      </h1>
-      <h2>Commit Statistics</h2>
-      {stats.length > 0 ? (
-        <ResponsiveContainer width="100%" height={300}>
-          <BarChart data={stats}>
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="date" />
-            <YAxis />
-            <Tooltip />
-            <Bar dataKey="count" fill="#8884d8" />
-          </BarChart>
-        </ResponsiveContainer>
-      ) : (
-        <p>No commit statistics available.</p>
-      )}
-      <h2>Commit History</h2>
-      {commits.length > 0 ? (
-        <ul>
-          {commits.map((commit) => (
-            <li key={commit.sha}>
-              <strong>{commit.author}</strong>: {commit.message} (
-              {new Date(commit.date).toLocaleString()})
-            </li>
-          ))}
-        </ul>
-      ) : (
-        <p>No commits found.</p>
-      )}
+    <div className="min-h-screen bg-gray-100 p-6">
+      <div className="max-w-3xl mx-auto bg-white p-6 rounded-lg shadow-md">
+        <h1 className="text-3xl font-semibold mb-4">
+          Repository:{" "}
+          <span className="text-blue-600">
+            {owner}/{repo}
+          </span>
+        </h1>
+
+        <h2 className="text-xl font-semibold mb-3">Commit Statistics</h2>
+        {stats.length > 0 ? (
+          <div className="bg-gray-200 p-4 rounded-lg shadow-md">
+            <ResponsiveContainer width="100%" height={300}>
+              <BarChart data={stats}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="date" />
+                <YAxis />
+                <Tooltip />
+                <Bar dataKey="count" fill="#8884d8" />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+        ) : (
+          <p className="text-gray-600">No commit statistics available.</p>
+        )}
+
+        <h2 className="text-xl font-semibold mt-6 mb-3">Commit History</h2>
+        {commits.length > 0 ? (
+          <ul className="space-y-3">
+            {commits.map((commit) => (
+              <li
+                key={commit.sha}
+                className="bg-gray-200 p-3 rounded-lg shadow"
+              >
+                <strong>{commit.author}</strong>: {commit.message} <br />
+                <span className="text-sm text-gray-600">
+                  {new Date(commit.date).toLocaleString()}
+                </span>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p className="text-gray-600">No commits found.</p>
+        )}
+      </div>
     </div>
   );
 }
