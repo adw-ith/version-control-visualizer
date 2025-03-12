@@ -1,4 +1,4 @@
-// app/api/commits/route.ts
+// app/api/pull-requests/route.ts
 import { NextResponse } from "next/server";
 import axios from "axios";
 import { getServerSession } from "next-auth/next";
@@ -30,62 +30,45 @@ export async function GET(request: Request) {
     if (vcs === "gitlab") {
       apiUrl = `https://gitlab.com/api/v4/projects/${encodeURIComponent(
         `${owner}/${repo}`
-      )}/repository/commits`;
+      )}/merge_requests?state=all`;
     } else {
-      apiUrl = `https://api.github.com/repos/${owner}/${repo}/commits`;
+      apiUrl = `https://api.github.com/repos/${owner}/${repo}/pulls?state=all`;
       headers.Accept = "application/vnd.github.v3+json";
     }
 
     const response = await axios.get(apiUrl, { headers });
-    let commits = response.data;
+    let pullRequests = response.data;
 
-    // For GitHub, fetch additional stats for each commit
-    if (vcs === "github" && commits.length > 0) {
-      const commitsWithStats = await Promise.all(
-        commits.slice(0, 20).map(async (commit: any) => {
+    // For GitHub, fetch additional stats for each PR
+    if (vcs === "github" && pullRequests.length > 0) {
+      const prWithStats = await Promise.all(
+        pullRequests.slice(0, 10).map(async (pr: any) => {
           try {
-            const detailsUrl = commit.url;
+            const detailsUrl = pr.url;
             const detailsResponse = await axios.get(detailsUrl, { headers });
-
             return {
-              sha: commit.sha,
-              message: commit.commit.message,
-              author: commit.commit.author.name,
-              date: commit.commit.author.date,
-              additions: detailsResponse.data.stats?.additions,
-              deletions: detailsResponse.data.stats?.deletions,
-              files_changed: detailsResponse.data.files?.length,
+              ...pr,
+              additions: detailsResponse.data.additions,
+              deletions: detailsResponse.data.deletions,
+              changed_files: detailsResponse.data.changed_files,
             };
           } catch (error) {
             console.error(
-              `Error fetching details for commit ${commit.sha}:`,
+              `Error fetching details for PR #${pr.number}:`,
               error
             );
-            return {
-              sha: commit.sha,
-              message: commit.commit.message,
-              author: commit.commit.author.name,
-              date: commit.commit.author.date,
-            };
+            return pr;
           }
         })
       );
-      commits = commitsWithStats;
-    } else if (vcs === "gitlab") {
-      // For GitLab, transform the response to match our expected format
-      commits = commits.map((commit: any) => ({
-        sha: commit.id,
-        message: commit.message,
-        author: commit.author_name,
-        date: commit.created_at,
-      }));
+      pullRequests = prWithStats;
     }
 
-    return NextResponse.json(commits);
+    return NextResponse.json(pullRequests);
   } catch (error: any) {
     console.error(error);
     return NextResponse.json(
-      { error: "Error fetching commits" },
+      { error: "Error fetching pull requests" },
       { status: 500 }
     );
   }
