@@ -441,7 +441,7 @@ export default function RepoPage() {
         <div className="bg-white p-4 rounded-lg shadow">
           <h2 className="text-xl font-semibold mb-2">Recent Pull Requests</h2>
           <div className="grid gap-4">
-            {pullRequests.slice(0, 5).map((pr) => (
+            {pullRequests.slice(0, 10).map((pr) => (
               <Link
                 key={pr.number}
                 href={`/repo/${vcs}/${owner}/${repo}/pull/${pr.number}`}
@@ -483,7 +483,7 @@ export default function RepoPage() {
                 )}
               </Link>
             ))}
-            {pullRequests.length > 5 && (
+            {pullRequests.length > 10 && (
               <div className="text-center">
                 <Link
                   href={`/repo/${vcs}/${owner}/${repo}/pulls`}
@@ -500,7 +500,7 @@ export default function RepoPage() {
         <div className="bg-white p-4 rounded-lg shadow">
           <h2 className="text-xl font-semibold mb-2">Recent Commits</h2>
           <div className="grid gap-4">
-            {commits.slice(0, 5).map((commit) => (
+            {commits.slice(0, 30).map((commit) => (
               <Link
                 key={commit.sha}
                 href={`/repo/${vcs}/${owner}/${repo}/commit/${commit.sha}`}
@@ -538,7 +538,7 @@ export default function RepoPage() {
                 </div>
               </Link>
             ))}
-            {commits.length > 5 && (
+            {commits.length > 30 && (
               <div className="text-center">
                 <Link
                   href={`/repo/${vcs}/${owner}/${repo}/commits`}
