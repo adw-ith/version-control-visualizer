@@ -21,7 +21,7 @@ export async function GET(request: Request) {
     if (vcs === "gitlab") {
       apiUrl = "https://gitlab.com/api/v4/projects?membership=true";
     } else {
-      apiUrl = "https://api.github.com/user/repos";
+      apiUrl = "https://api.github.com/user/repos?per_page=100&page=1";
       headers.Accept = "application/vnd.github.v3+json";
     }
 
@@ -35,6 +35,9 @@ export async function GET(request: Request) {
       }));
     } else {
       repos = response.data;
+    }
+    for (const repo of repos) {
+      console.log(repo.name);
     }
 
     return NextResponse.json(repos);

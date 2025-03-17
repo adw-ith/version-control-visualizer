@@ -72,7 +72,6 @@ export async function GET(request: Request) {
       );
       commits = commitsWithStats;
     } else if (vcs === "gitlab") {
-      // For GitLab, transform the response to match our expected format
       commits = commits.map((commit: any) => ({
         sha: commit.id,
         message: commit.message,
