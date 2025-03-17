@@ -20,6 +20,8 @@ import {
 } from "recharts";
 import BranchMergeDiagram from "@/components/branch";
 import RepoTimeline from "@/components/timeline";
+import IssuesListPage from "@/components/issue";
+import IssueDashboard from "@/components/issuedash";
 
 interface Commit {
   sha: string;
@@ -437,6 +439,7 @@ export default function RepoPage() {
             </div>
           </div>
         </div>
+        <IssuesListPage />
 
         {/* Recent Pull Requests */}
         <div className="bg-white p-4 rounded-lg shadow">
