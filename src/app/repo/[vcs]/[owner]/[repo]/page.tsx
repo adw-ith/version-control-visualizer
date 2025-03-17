@@ -19,6 +19,7 @@ import {
   Legend,
 } from "recharts";
 import BranchMergeDiagram from "@/components/branch";
+import RepoTimeline from "@/components/timeline";
 
 interface Commit {
   sha: string;
@@ -596,6 +597,7 @@ export default function RepoPage() {
             <BranchMergeDiagram branches={branches} />
           </div>
         )}
+        <RepoTimeline />
       </div>
     </div>
   );

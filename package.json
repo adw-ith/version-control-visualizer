@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@octokit/rest": "^21.1.1",
     "axios": "^1.7.9",
     "diff2html": "^3.4.51",
     "lucide-react": "^0.479.0",
