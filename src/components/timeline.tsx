@@ -26,7 +26,7 @@ export default function RepoTimeline() {
     "all" | "commits" | "pull_requests" | "merges"
   >("all");
   const [timeRange, setTimeRange] = useState<"week" | "month" | "year" | "all">(
-    "month"
+    "all"
   );
 
   useEffect(() => {
