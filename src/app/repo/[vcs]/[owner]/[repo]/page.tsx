@@ -600,7 +600,7 @@ export default function RepoPage() {
             <BranchMergeDiagram branches={branches} />
           </div>
         )}
-        <RepoTimeline />
+        {vcs == "github" ? <RepoTimeline /> : null}
       </div>
     </div>
   );
